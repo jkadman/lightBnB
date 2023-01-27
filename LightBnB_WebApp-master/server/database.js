@@ -1,6 +1,7 @@
 require('dotenv').config();
 
 
+const { query } = require('express');
 const { Pool } = require('pg');
 
 const config = {
@@ -179,16 +180,48 @@ exports.getAllReservations = getAllReservations;
 
 // 
 const getAllProperties = function(options, limit = 10) {
-  const text = `SELECT * FROM properties LIMIT $1`;
-  const values = [limit];
+
+  const queryParams = [];
+
+  let text = `SELECT properties.*, AVG(property_reviews.rating)
+  FROM properties
+  JOIN property_reviews ON properties.id = property_id
+  `;
+
+  // set owner_id to param option
+  if (options.owner_id) {
+    queryParams.push(`${options.owner_id}`);
+    text += `AND owner_id = $${queryParams.length}`;
+  }
+
+  if (options.city) {
+    queryParams.push(`%${options.city}%`);
+    text += `WHERE city LIKE $${queryParams.length}`;
+  }
+
+  // if (options.cost_per_night) {
+  //   queryParams.push(`${options.cost_per_night}`);
+  //   text += `AND cost_per_night < $${queryParams.length}`;
+  // }
+
+  queryParams.push(limit);
+  text += `
+  GROUP BY properties.id
+  ORDER BY cost_per_night
+  LIMIT $${queryParams.length};
+  `;
+
+  console.log(text, queryParams);
+
+  // const values = [limit];
   return pool
-  .query(text, values)
+  .query(text, queryParams)
   .then((result) => {
-    // console.log(result.rows);
+    console.log('results:', result.rows);
     return result.rows;
   })
   .catch((err) => {
-      conosle.log(err.message);
+      console.log(err.message);
   });
 };
 exports.getAllProperties = getAllProperties;
