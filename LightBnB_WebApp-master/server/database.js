@@ -11,9 +11,6 @@ const config = {
   database: process.env.DB_data
 }
 
-
-
-
 const pool = new Pool(config)
 
 const properties = require('./json/properties.json');
@@ -188,21 +185,29 @@ const getAllProperties = function(options, limit = 10) {
   JOIN property_reviews ON properties.id = property_id
   `;
 
-  // set owner_id to param option
+  // show listings if an owner
   if (options.owner_id) {
     queryParams.push(`${options.owner_id}`);
     text += `AND owner_id = $${queryParams.length}`;
   }
 
+  // searching for a city
   if (options.city) {
     queryParams.push(`%${options.city}%`);
     text += `WHERE city LIKE $${queryParams.length}`;
   }
 
-  // if (options.cost_per_night) {
-  //   queryParams.push(`${options.cost_per_night}`);
-  //   text += `AND cost_per_night < $${queryParams.length}`;
-  // }
+  //search for a certain cost per night
+  if (options.minimum_price_per_night) {
+    queryParams.push(`${options.minimum_price_per_night}`*100);
+    text += `AND cost_per_night >= $${queryParams.length}`;
+  }
+
+  if (options.maximum_price_per_night) {
+    queryParams.push(`${options.maximum_price_per_night}`*100);
+    text += `AND cost_per_night <= $${queryParams.length}`;
+  }
+  
 
   queryParams.push(limit);
   text += `
@@ -210,6 +215,8 @@ const getAllProperties = function(options, limit = 10) {
   ORDER BY cost_per_night
   LIMIT $${queryParams.length};
   `;
+
+// why is limit always returning 20?
 
   console.log(text, queryParams);
 
