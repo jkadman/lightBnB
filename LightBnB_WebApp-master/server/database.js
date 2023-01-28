@@ -245,10 +245,32 @@ exports.getAllProperties = getAllProperties;
  * @param {{}} property An object containing all of the property details.
  * @return {Promise<{}>} A promise to the property.
  */
+// const addProperty = function(property) {
+//   const propertyId = Object.keys(properties).length + 1;
+//   property.id = propertyId;
+//   properties[propertyId] = property;
+//   return Promise.resolve(property);
+// }
+
+// add property field and corresponding values: owner_id ($1), title ($2), description ($3), thumbnail_photo_url ($4), cover_photo_url ($5), cost_per_night ($6), parking_spaces ($7), 
+//number_of_bathrooms ($8), number_of_bedrooms ($9), country ($10), street ($11), city ($12), province ($13), post_code ($14)
+
 const addProperty = function(property) {
-  const propertyId = Object.keys(properties).length + 1;
-  property.id = propertyId;
-  properties[propertyId] = property;
-  return Promise.resolve(property);
+  const text = `INSERT INTO properties (owner_id, title, description, thumbnail_photo_url, cover_photo_url, cost_per_night, parking_spaces, number_of_bathrooms, number_of_bedrooms, country, 
+    street, city, province, post_code) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14) RETURNING *;`
+  const values = [`${property.owner_id}`, `${property.title}`, `${property.description}`, `${property.thumbnail_photo_url}`, `${property.cover_photo_url}`,
+    `${property.cost_per_night}`, `${property.parking_spaces}`, `${property.number_of_bathrooms}`, `${property.number_of_bedrooms}`, `${property.country}`, 
+    `${property.street}`, `${property.city}`, `${property.province}`, `${property.post_code}`];
+
+  console.log(values)
+  return pool
+    .query (text, values)
+    .then((result) => {
+      console.log('result:', result.rows[0]);
+      return result.rows[0];
+    })
+    .catch((err) => {
+      console.log(err)
+    })
 }
 exports.addProperty = addProperty;
