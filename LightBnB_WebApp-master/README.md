@@ -48,7 +48,6 @@
 ![Login page](images/login.png)
 
 
-
 ## Websites used while working through this project:
   <If conditions in promises>: https://vijayt.com/post/conditional-promise-chaining-pattern-better-code/ (didn't end up using but referenced)
   <used dotenv, for installation see>: https://www.npmjs.com/package/dotenv
