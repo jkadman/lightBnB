@@ -42,7 +42,14 @@
   * `json` is a directory that contains a bunch of dummy data in `.json` files.
   * `database.js` is responsible for all queries to the database. It doesn't currently connect to any database, all it does is return data from `.json` files.
 
-  Websites used while working through this project:
+## Project Images
+![Create a listing](images/createlisting.png)
+![List of reservations](images/reservations.png)
+![Login page](images/login.png)
+
+
+
+## Websites used while working through this project:
   <If conditions in promises>: https://vijayt.com/post/conditional-promise-chaining-pattern-better-code/ (didn't end up using but referenced)
-  <protecting database name etc>: https://www.npmjs.com/package/dotenv
+  <used dotenv, for installation see>: https://www.npmjs.com/package/dotenv
   <ERD created with>: https://app.diagrams.net/ 
