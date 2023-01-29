@@ -2,21 +2,23 @@ require('dotenv').config();
 
 
 const { query } = require('express');
-const { Pool } = require('pg');
+// const { Pool } = require('pg');
 
-const config = {
-  user: process.env.DB_user,
-  password: process.env.DB_pass,
-  host: process.env.DB_host,
-  database: process.env.DB_data
-}
+// const config = {
+//   user: process.env.DB_user,
+//   password: process.env.DB_pass,
+//   host: process.env.DB_host,
+//   database: process.env.DB_data
+// }
 
-const pool = new Pool(config)
+// const pool = new Pool(config)
+
+const db = require('./dbindex')
 
 const properties = require('./json/properties.json');
 const users = require('./json/users.json');
 
-pool.connect();
+// pool.connect();
 
 // pool.query('SELECT * FROM users LIMIT 5')
 //   .then((user) => {
@@ -51,8 +53,8 @@ const getUserWithEmail = function(email) {
   const text = `SELECT * FROM users WHERE users.email = $1`;
   const values = [`${email}`];
 
-  return pool
-    .query(text, values)
+  
+    db.query(text, values)
     .then((result) => {
       return result.rows[0];
     })
@@ -75,8 +77,8 @@ const getUserWithId = function(id) {
   const values = [`${id}`];
   console.log(values)
 
-  return pool
-    .query(text, values)
+
+    db.query(text, values)
     .then((result) => {
       console.log('result:', result)
       return result.rows[0]
@@ -109,8 +111,8 @@ exports.getUserWithId = getUserWithId;
     const text = `INSERT INTO users (name, email, password) VALUES ($1, $2, $3) RETURNING *`;
     const values = [`${user.name}`, `${user.email}`, `${user.password}`]
 
-    return pool
-      .query(text, values)
+    
+      db.query(text, values)
       .then((result) => {
         console.log(result.rows[0]);
         return result.rows[0];
@@ -145,8 +147,8 @@ const getAllReservations = function(guest_id, limit = 10) {
   LIMIT $2;`
   const values = [`${guest_id}`, limit]
 
-  return pool
-    .query(text, values)
+  
+    db.query(text, values)
     .then((result) => { 
       console.log('result:', result.rows[0])
       return result.rows;
@@ -227,8 +229,8 @@ const getAllProperties = function(options, limit = 10) {
   console.log(text, queryParams);
 
   // const values = [limit];
-  return pool
-  .query(text, queryParams)
+  
+  db.query(text, queryParams)
   .then((result) => {
     // console.log('results:', result.rows);
     return result.rows;
@@ -263,8 +265,9 @@ const addProperty = function(property) {
     `${property.street}`, `${property.city}`, `${property.province}`, `${property.post_code}`];
 
   console.log(values)
-  return pool
-    .query (text, values)
+  // return pool
+  //   .query (text, values)
+    db.query(text, values)
     .then((result) => {
       console.log('result:', result.rows[0]);
       return result.rows[0];
