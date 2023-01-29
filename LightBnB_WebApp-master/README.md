@@ -44,4 +44,5 @@
 
   Websites used while working through this project:
   <If conditions in promises>: https://vijayt.com/post/conditional-promise-chaining-pattern-better-code/ (didn't end up using but referenced)
-  <protecting database name etc>https://www.npmjs.com/package/dotenv
+  <protecting database name etc>: https://www.npmjs.com/package/dotenv
+  <ERD created with>: https://app.diagrams.net/ 
