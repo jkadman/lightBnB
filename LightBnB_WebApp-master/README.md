@@ -52,3 +52,5 @@
   <If conditions in promises>: https://vijayt.com/post/conditional-promise-chaining-pattern-better-code/ (didn't end up using but referenced)
   <used dotenv, for installation see>: https://www.npmjs.com/package/dotenv
   <ERD created with>: https://app.diagrams.net/ 
+
+  something
