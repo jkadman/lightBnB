@@ -9,7 +9,7 @@ FROM properties
 JOIN reservations ON property_id = properties.id
 JOIN property_reviews ON reservation_id = reservations.id
 JOIN users ON users.id = reservations.guest_id
-WHERE users.email LIKE '%tristanjacobs@gmail.com%'
+WHERE users.id = 1
 GROUP BY reservations.id, properties.id
 ORDER BY start_date
 LIMIT 10;
