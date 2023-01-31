@@ -49,10 +49,34 @@
 ![List of reservations](images/reservations.png)
 ![Login page](images/login.png)
 
+## To run the app
+
+download from Github
+npm install
+cd into LightBnB_WebApp-master
+in terminal enter npm run local
+
+## To create database
+
+run psql in terminal
+use CREATE DATABSE lightbnb
+get into the database using \c lightbnb
+create tables using \i migrations\01_schema.sql (note: stretch tables contain no data)
+import data using \i seeds\01_seeds.sql and 02_seeds.sql
+
 
 ## Websites used while working through this project:
   <If conditions in promises>: https://vijayt.com/post/conditional-promise-chaining-pattern-better-code/ (didn't end up using but referenced)
-  <used dotenv, for installation see>: https://www.npmjs.com/package/dotenv
   <ERD created with>: https://app.diagrams.net/ 
 
+
+## Dependencies
+
+  "bcrypt": "^3.0.6": https://www.npmjs.com/package/bcrypt
+  "body-parser": "^1.19.0": https://www.npmjs.com/package/body-parser
+  "cookie-session": "^1.3.3": https://www.npmjs.com/package/cookie-session
+  "dotenv": "^16.0.3": https://www.npmjs.com/package/dotenv
+  "express": "^4.17.1": https://expressjs.com/
+  "nodemon": "^1.19.1": https://www.npmjs.com/package/nodemon
+  "pg": "^8.9": https://www.npmjs.com/package/pg 
   
