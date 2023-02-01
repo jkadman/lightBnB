@@ -123,21 +123,21 @@ const getAllProperties = function(options, limit = 10) {
 
   const queryParams = [];
 
-  let text = `SELECT properties.*, AVG(property_reviews.rating) AS average_rating 
+  let text = `SELECT properties.*, AVG(property_reviews.rating) AS average_rating
   FROM properties
   JOIN property_reviews ON properties.id = property_id
   `;
-
-  // show listings if an owner
-  if (options.owner_id) {
-    queryParams.push(`${options.owner_id}`);
-    text += `AND owner_id = $${queryParams.length}`;
-  }
 
   // searching for a city
   if (options.city) {
     queryParams.push(`%${options.city}%`);
     text += `WHERE city LIKE $${queryParams.length}`;
+  }
+
+  // show listings if an owner
+  if (options.owner_id) {
+    queryParams.push(`${options.owner_id}`);
+    text += `AND owner_id = $${queryParams.length}`;
   }
 
   //search for a minimum price
@@ -152,18 +152,20 @@ const getAllProperties = function(options, limit = 10) {
     text += `AND cost_per_night <= $${queryParams.length}`;
   }
   
+  text +=
+  `
+  GROUP BY properties.id`
   //search for a particular rating
   if (options.minimum_rating) {
     queryParams.push(Number(`${options.minimum_rating}`));
-    text += `AND property_reviews.rating >= $${queryParams.length}`;
+    text += `
+    HAVING AVG(property_reviews.rating) >= $${queryParams.length}`;
   }
-
   queryParams.push(limit);
   text += `
-  GROUP BY properties.id
   ORDER BY cost_per_night
   LIMIT $${queryParams.length};
-  `;
+  `;   
 
   return pool
   .query(text, queryParams)
